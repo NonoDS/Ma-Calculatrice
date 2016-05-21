@@ -1,0 +1,11 @@
+/packages
+/.vs
+/Calculateur/bin
+/Calculateur/obj
+/Calculateur/*.user
+/CalculatriceFR2/bin
+/CalculatriceFR2/obj
+/CalculatriceFR2/*.user
+/WpfCalc/obj
+/WpfCalc/*.user
+/WpfCalc/bin

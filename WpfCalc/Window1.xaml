@@ -1,0 +1,156 @@
+﻿<Window x:Class="WpfCalc.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:WpfCalc"
+    FocusManager.FocusedElement="{Binding ElementName=TextExpression}"
+    Title="Chaos" Height="418" Width="484" MinHeight="260" MinWidth="400">
+    <Window.Resources>
+        <local:CommandReference x:Key="ExecuteCalculCommand" Command="{Binding ExecuteCalcul}"/>
+    </Window.Resources>
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="LightSteelBlue" Offset="1"></GradientStop>
+            <GradientStop Color="White" Offset="-0.5"></GradientStop>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75" />
+            <RowDefinition Height="22" />
+            <RowDefinition Height="297*" />
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <local:EnumBooleanConverter x:Key="enumBooleanConverter" />
+        </Grid.Resources>
+        <TextBox x:Name="TextExpression" Grid.ColumnSpan="3" MaxLines="1" VerticalContentAlignment="Center" FontSize="22" TabIndex="0" Margin="12,12,12,12" 
+                 Text="{Binding Expression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.InputBindings>
+                <KeyBinding Gesture="Return" Command="{StaticResource ExecuteCalculCommand}"></KeyBinding>
+            </TextBox.InputBindings>
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ErreurSyntaxe, Mode=OneWay}" Value="True">
+                            <DataTrigger.Setters>
+                                <Setter Property="TextBox.Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#FF1010" Offset="0"/>
+                                            <GradientStop Color="White" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>                                
+                            </DataTrigger.Setters>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ErreurSyntaxe, Mode=OneWay}" Value="False">
+                          <Setter Property="TextBox.Background">
+                              <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#E0F0FF" Offset="0"/>
+                                    <GradientStop Color="White" Offset="0.7"/>
+                                </LinearGradientBrush>
+                               </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <RadioButton Grid.Row="1" Grid.ColumnSpan="2" IsChecked="{Binding Path=Angle, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Degres}" Margin="12,0,0,0" Height="16" VerticalAlignment="Top" HorizontalAlignment="Left" Width="64">Degrés</RadioButton>
+        <RadioButton Grid.ColumnSpan="2" IsChecked="{Binding Path=Angle, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Radians}" Margin="91,0,0,0" HorizontalAlignment="Left" Width="63" Grid.Row="1" Height="22" VerticalAlignment="Top">Radians</RadioButton>
+        <RadioButton Grid.Row="1" Grid.ColumnSpan="2" IsChecked="{Binding Path=Angle, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Grades}" Margin="172,0,0,0" Height="16" VerticalAlignment="Top" HorizontalAlignment="Left" Width="86.333">Grades</RadioButton>
+        <Grid Grid.Column="2" Grid.Row="2" Margin="5,5,12,12">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="LightSteelBlue" Offset="1.2"></GradientStop>
+                    <GradientStop Color="White" Offset="0.1"></GradientStop>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.Effect>
+                <DropShadowEffect Color="Gray"/>
+            </Grid.Effect>
+            <ListBox ItemsSource="{Binding Fonctions}" BorderThickness="0">
+                <ListBox.Background>
+                    <VisualBrush>
+                        <VisualBrush.Visual>
+                            <TextBlock Foreground="#FFE0FF">
+                            <TextBlock.RenderTransform>
+                                <RotateTransform Angle="-80"/>
+                            </TextBlock.RenderTransform>Fonctions</TextBlock>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </ListBox.Background>
+            </ListBox>
+        </Grid >
+
+        <Grid Grid.Row="2" Grid.Column="1" Margin="5,5,5,12">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="LightSteelBlue" Offset="1.2"></GradientStop>
+                    <GradientStop Color="White" Offset="0.1"></GradientStop>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.Effect>
+                <DropShadowEffect Color="Gray"/>
+            </Grid.Effect>
+            <ListBox ItemsSource="{Binding Variables}" BorderThickness="0">
+                <ListBox.Background>
+                    <VisualBrush>
+                        <VisualBrush.Visual>
+                            <TextBlock Foreground="#FFE0E0">
+                            <TextBlock.RenderTransform>
+                                <RotateTransform Angle="-80"/>
+                            </TextBlock.RenderTransform>Variables</TextBlock>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </ListBox.Background>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Bottom" FontWeight="Bold" Margin="0,0,5,0" FontSize="16" Text="{Binding Path=Nom}"/>
+                            <TextBlock VerticalAlignment="Bottom" Foreground="Blue" Text="{Binding Path=Valeur}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+        <Grid Grid.Row="2" Margin="12,5,5,12">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="LightSteelBlue" Offset="1.2"></GradientStop>
+                    <GradientStop Color="White" Offset="0.1"></GradientStop>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.Effect>
+                <DropShadowEffect Color="Gray"/>
+            </Grid.Effect>
+        <ListBox ItemsSource="{Binding Expressions}" BorderThickness="0">
+            <ListBox.Background>
+                <VisualBrush Stretch="Uniform" AlignmentX="Right">
+                    <VisualBrush.Visual>
+                        <TextBlock Foreground="#E0E0FF">
+                            <TextBlock.LayoutTransform>
+                                <RotateTransform Angle="-90"/>
+                            </TextBlock.LayoutTransform> Calculs</TextBlock>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </ListBox.Background>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock VerticalAlignment="Bottom" Margin="0,0,5,0" Text="{Binding Path=Expression}"/>
+                        <TextBlock VerticalAlignment="Bottom" Margin="0,0,5,0" Text=" = "/>
+                        <TextBlock VerticalAlignment="Bottom" FontWeight="Bold" FontSize="16" Foreground="Blue" Text="{Binding Path=Resultat}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+       </Grid>
+    </Grid>
+</Window>
+
