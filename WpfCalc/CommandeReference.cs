@@ -9,6 +9,8 @@ namespace WpfCalc
 {
     public class CommandReference : Freezable, ICommand
     {
+
+
         public CommandReference()
         {
             // Blank
